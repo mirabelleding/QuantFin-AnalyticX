@@ -227,3 +227,5 @@ if ticker_input:
 
 else:
     st.info("Please enter a ticker symbol.")
+
+st.caption("Data cached for 1 hour to avoid repeated yFinance requests and rate limiting.")
