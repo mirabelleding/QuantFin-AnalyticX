@@ -4,7 +4,7 @@ An interactive web platform for financial option pricing, risk analytics, and po
 
 ---
 
-*Inspired by the Options and Futures elective during my undergraduate studies, back when BSM and GBM functions were still calculated by hand.*
+*Inspired by the Options and Futures elective course during my undergraduate studies, back when BSM and GBM functions were still calculated by hand.*
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Geometric Brownian Motion (GBM):**
