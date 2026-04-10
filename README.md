@@ -7,17 +7,14 @@ An interactive web platform for financial option pricing, risk analytics, and po
 *Inspired by the Options and Futures elective during my undergraduate studies, back when BSM and GBM functions were still calculated by hand.*
 
 
-**Geometric Brownian Motion (GBM):**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Geometric Brownian Motion (GBM):**
 
-$$
-dS_t = \mu S_t \, dt + \sigma S_t \, dW_t
-$$
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $dS_t = \mu S_t dt + \sigma S_t dW_t$
 
-**Black–Scholes Formula (for a Call Option):**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Black–Scholes Formula (for a Call Option):**
 
-$$
-C(S_t, t) = S_t N(d_1) - K e^{-r(T - t)} N(d_2)
-$$
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $C(S_t, t) = S_t N(d_1) - K e^{-r(T-t)} N(d_2)$
+
 
 ---
 
