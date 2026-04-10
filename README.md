@@ -1,5 +1,25 @@
 # QuantFin-AnalyticX
+
 An interactive web platform for financial option pricing, risk analytics, and portfolio simulation.
+
+---
+
+*Inspired by the Options and Futures elective during my undergraduate studies, back when BSM and GBM functions were still calculated by hand.*
+
+
+**Geometric Brownian Motion (GBM):**
+
+$$
+dS_t = \mu S_t \, dt + \sigma S_t \, dW_t
+$$
+
+**Black–Scholes Formula (for a Call Option):**
+
+$$
+C(S_t, t) = S_t N(d_1) - K e^{-r(T - t)} N(d_2)
+$$
+
+---
 
 ### Feature Functionalities
 * **Option Chain Valuation:** Real-time pricing using the Black-Scholes model, datasource from yfinance.
@@ -8,3 +28,4 @@ An interactive web platform for financial option pricing, risk analytics, and po
 * **Risk Dashboard:** Portfolio sensitivity tracking (Δ, Γ, Θ, ν, ρ) with PnL monitoring.
   
 Hosted on streamlit: https://quantfin-analyticx.streamlit.app
+
