@@ -11,9 +11,9 @@ import plotly.graph_objects as go
 def highlight_itm(row, current_price, option_type):
     strike = row.name
     if option_type == "call" and strike < current_price:
-        return ['background-color: #e6f7ff'] * len(row)
+        return ['background-color: #A8E6CF; color: black'] * len(row)
     elif option_type == "put" and strike > current_price:
-        return ['background-color: #e6f7ff'] * len(row)
+        return ['background-color: #A8E6CF; color: black'] * len(row)
     else:
         return [''] * len(row)
 
@@ -131,7 +131,8 @@ if ticker_input:
                     """
                     <div style='
                         display: inline-block;
-                        background-color: #e6f7ff;
+                        background-color: #A8E6CF;
+                        color: black;
                         border-left: 4px solid #5faad1;
                         padding: 0px 10px;
                         font-size: 0.85rem;
