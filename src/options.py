@@ -1,13 +1,18 @@
-import yfinance as yf
-from types import SimpleNamespace
-from datetime import datetime, timedelta
 import json
 import os
+from collections.abc import Sequence
+from datetime import date, datetime, timedelta
+from types import SimpleNamespace
+from typing import Any
+
 import pandas as pd
 import requests
+import yfinance as yf
 
 
-def get_ticker_data(ticker_input):
+def get_ticker_data(
+    ticker_input: str,
+) -> tuple[Any, pd.DataFrame, Sequence[str]]:
     # Attempt yfinance first
     try:
         ticker = yf.Ticker(ticker_input)
@@ -52,6 +57,7 @@ def get_ticker_data(ticker_input):
 
 
 class OptionChain:
+
     def __init__(self, option_data, reference_date=None):
         self.reference_date = reference_date or datetime.today().date()
         self.expiries = {}
@@ -61,6 +67,7 @@ class OptionChain:
                 days = int(label.split("+")[1].strip())
                 actual_date = self.reference_date + timedelta(days=days)
                 date_key = str(actual_date)
+
             else:
                 date_key = label
 
@@ -94,6 +101,7 @@ class OptionChain:
 
 
 class Ticker:
+
     def __init__(self, data):
         self.ticker = data["ticker"]
         self.stock_price = data["stock_price"]
@@ -107,4 +115,5 @@ json_path = os.path.join(current_dir, "..", "demo_data", "demo_option.json")
 def load_demo_option(path=json_path, reference_date=None):
     with open(path, "r") as f:
         data = json.load(f)
+
     return Ticker(data)

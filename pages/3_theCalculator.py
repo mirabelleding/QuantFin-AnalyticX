@@ -1,5 +1,5 @@
 import streamlit as st
-from src.pricing import black_scholes
+from src.black_scholes import calculate_black_scholes
 from src.greeks import GreekCalculator
 
 st.set_page_config(page_title="Black Scholes Calculator", layout="centered")
@@ -36,8 +36,8 @@ else:  # Days
     T = time_value / 365
 
 # -- Calculation --
-call_price = black_scholes(S, K, T, r, sigma, option_type='call', q=div)
-put_price  = black_scholes(S, K, T, r, sigma, option_type='put',  q=div)
+call_price = calculate_black_scholes(S, K, T, r, sigma, option_type='call', q=div)
+put_price  = calculate_black_scholes(S, K, T, r, sigma, option_type='put',  q=div)
 call_greeks = GreekCalculator(S, K, T, r, sigma, option_type='call')
 put_greeks  = GreekCalculator(S, K, T, r, sigma, option_type='put')
 

@@ -1,3 +1,5 @@
+from typing import Literal
+
 import numpy as np
 from scipy.stats import norm
 
@@ -13,22 +15,31 @@ Parameters:
 """
 
 
-def black_scholes(S, K, T, r, sigma, option_type, q=0):
+def calculate_black_scholes(
+    S: float,
+    K: float,
+    T: float,
+    r: float,
+    sigma: float,
+    option_type: Literal["call", "put"],
+) -> float:
+
     for name, val in zip(['S', 'K', 'T', 'r', 'sigma', 'q'], [S, K, T, r, sigma, q]):
         if not isinstance(val, (int, float)):
             raise TypeError(f"{name} must be an int or float, got {type(val).__name__}")
+
     if option_type not in ['call', 'put']:
         raise ValueError("option_type must be 'call' or 'put'")
 
     if T <= 0:
-        # Option has expired — intrinsic value only
+        # Option expired — intrinsic value only
         if option_type == 'call':
             return max(S - K, 0)
         else:
             return max(K - S, 0)
 
     if sigma <= 0:
-        # Zero volatility — option is either in the money or not
+        # Zero volatility — option either in the money or not
         if option_type == 'call':
             return np.exp(-r * T) * max(S - K, 0)
         else:
@@ -44,4 +55,3 @@ def black_scholes(S, K, T, r, sigma, option_type, q=0):
         price = K * np.exp(-r * T) * norm.cdf(-d2) - S * np.exp(-q * T) * norm.cdf(-d1)
 
     return price
-

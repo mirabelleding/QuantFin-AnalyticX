@@ -1,15 +1,17 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from src.utils import get_ticker_data, load_demo_option
-from src.pricing import black_scholes
+from src.options import get_ticker_data, load_demo_option
+from src.black_scholes import calculate_black_scholes
 from src.greeks import GreekCalculator
 import plotly.graph_objects as go
 
 
-# highlight in-the-money cells
+# highlight in-the-money options
 def highlight_itm(row, current_price, option_type):
+
     strike = row.name
+
     if option_type == "call" and strike < current_price:
         return ['background-color: #A8E6CF; color: black'] * len(row)
     elif option_type == "put" and strike > current_price:
@@ -18,18 +20,18 @@ def highlight_itm(row, current_price, option_type):
         return [''] * len(row)
 
 
-# cache yfinance data for 1h
+# cache yfinance data for 1h for rate limiting
 @st.cache_data(ttl=3600)
 def get_option(ticker_input):
     return get_ticker_data(ticker_input)
 
 
 st.set_page_config(page_title="Black-Scholes Option Chain Pricing Model", layout="centered")
+
 st.title("Black-Scholes Option Chain Pricing Model")
 st.write("Access option chain data for a selected stock ticker, featuring both market prices and "
          "theoretical Black Scholes values to identify potential pricing discrepancies.")
 
-# Ticker Input
 ticker_input = st.text_input(
     "Search a ticker",
     placeholder="e.g. AAPL, TSLA",
@@ -63,7 +65,6 @@ if ticker_input:
         S = ticker.stock_price
         st.markdown(f"### 💰 Current Price of demo: ${S:.2f}")
 
-    # Expiration selection
     default_expiries = all_expiries[:2]
     selected_expiries = st.multiselect("Select Expiration Dates to Load", all_expiries, default=default_expiries)
 
@@ -71,6 +72,7 @@ if ticker_input:
     now = datetime.now()
 
     for expiry in selected_expiries:
+
         expiry_date = pd.to_datetime(expiry)
         T = (expiry_date - now).days / 365
 
@@ -82,14 +84,13 @@ if ticker_input:
             df["Expiry"] = expiry_date
             df["T"] = T
             df["BS Price"] = df.apply(
-                lambda row: black_scholes(S, row["strike"], T, r, row["impliedVolatility"], opt_type),
+                lambda row: calculate_black_scholes(S, row["strike"], T, r, row["impliedVolatility"], opt_type),
                 axis=1
                 )
             all_options.append(df)
 
     full_chain = pd.concat(all_options, ignore_index=True)
 
-        # Strike price filter
     st.markdown("#### 🔎 Filter Strike Price Range")
     min_strike = float(full_chain["strike"].min())
     max_strike = float(full_chain["strike"].max())
@@ -100,7 +101,6 @@ if ticker_input:
             (full_chain["strike"] <= strike_range[1])
             ]
 
-        # Option Chain Result Display
     st.subheader("📅 Option Chain Results")
 
     for expiry in sorted(filtered["Expiry"].unique()):
@@ -137,7 +137,7 @@ if ticker_input:
                         padding: 0px 10px;
                         font-size: 0.85rem;
                         font-weight: 500;
-                        margin-bottom: 0.5rem;
+                        margin-bottom: 0.5rem;P
                         border-radius: 3px;
                     '>
                         *In The Money
@@ -189,10 +189,12 @@ if ticker_input:
     # --- Analyze a specific option ---
     st.markdown("---")
     st.markdown("#### Analyze a Specific Option")
+
     unique_options = filtered[["strike", "OptionType", "Expiry"]].drop_duplicates()
     unique_options["label"] = unique_options.apply(
         lambda row: f"{ticker_input} {row['OptionType'].capitalize()} @ {row['strike']} ({row['Expiry'].date()})",
         axis=1)
+
     labels = ["Select an option..."] + list(unique_options["label"])
     selected_row = st.selectbox("Select an Option", labels)
 
@@ -211,7 +213,7 @@ if ticker_input:
             ].iloc[0]
 
         sigma = row_data["impliedVolatility"]
-        bs_price = black_scholes(S, strike, T, r, sigma, option_type)
+        bs_price = calculate_black_scholes(S, strike, T, r, sigma, option_type)
 
         greeks = GreekCalculator(S, strike, T, r, sigma, option_type).to_dict()
         greeks_clean = {k: round(v, 4) for k, v in greeks.items()}
